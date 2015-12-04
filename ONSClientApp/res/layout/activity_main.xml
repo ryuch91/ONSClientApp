@@ -8,11 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kr.ac.kaist.gan.MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-    
     <EditText
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
@@ -21,7 +16,6 @@
         android:singleLine="true"
         android:maxLength="10"
         android:inputType="text">
-        
     </EditText>
     
     <Button

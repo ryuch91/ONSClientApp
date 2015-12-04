@@ -75,6 +75,12 @@ public class SimpleSocketThread extends Thread{
 		makeMessage(MessageType.SIMSOCK_CONNECTED, "");
 		Log.d("SimpleSocket", "socket_thread loop started");
 
+		try{
+			buffSend.write("Hello");
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 		String aLine = null;
 
 		while( !Thread.interrupted() ){ try {

@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 			}
 		};
 		
-		final SimpleSocketThread ssocket = new SimpleSocketThread("192.168.0.1", 7777, mHandler);
+		final SimpleSocketThread ssocket = new SimpleSocketThread("143.248.55.143", 7777, mHandler);
 		ssocket.start();
 		
 		buttonSend.setOnClickListener(new View.OnClickListener(){
