@@ -110,7 +110,11 @@ public class SimpleSocketThread extends Thread{
 	}
 	
 	public void sendString(Editable str){
-		PrintWriter out = new PrintWriter(buffSend, true);
-		out.println(str);
+		try{
+			PrintWriter out = new PrintWriter(buffSend, true);
+			out.println(str);
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
 	}
 }

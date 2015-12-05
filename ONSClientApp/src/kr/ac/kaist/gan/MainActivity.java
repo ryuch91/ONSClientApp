@@ -1,6 +1,8 @@
 package kr.ac.kaist.gan;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +16,7 @@ import android.widget.EditText;
 import kr.ac.kaist.gan.SimpleSocketThread.MessageTypeClass;
 
 public class MainActivity extends Activity {
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,12 +52,8 @@ public class MainActivity extends Activity {
 			public void onClick(View v){
 				// TODO Auto-generated method stub
 				ssocket.sendString(ed1.getText());
-				ed1.setText("");
 			}
 		});
-		
-		
-
 	}
 
 	@Override
@@ -76,4 +74,14 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	private void AlertDialog(){
+		AlertDialog.Builder ad = new AlertDialog.Builder(this);
+		ad.setMessage("Connection is failed").setPositiveButton("OK", new DialogInterface.OnClickListener(){ public void onClick(DialogInterface dialog, int id){dialog.cancel();}
+		});
+		AlertDialog alert = ad.create();
+		alert.setTitle("Warning");
+		alert.show();
+	}
+	
 }
