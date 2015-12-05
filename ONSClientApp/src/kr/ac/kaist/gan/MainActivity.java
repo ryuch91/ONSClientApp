@@ -1,8 +1,12 @@
 package kr.ac.kaist.gan;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -22,12 +26,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private EditText edtTextAddress;
 	private EditText edtTextPort;
 	private Button btnConnect;
 	private Button btnClear;
+	private EditText context;
 	private TextView txtResponse;
 
 	@Override
@@ -39,12 +45,13 @@ public class MainActivity extends Activity {
 		edtTextPort = (EditText) findViewById(R.id.port);
 		btnConnect = (Button) findViewById(R.id.connect);
 		btnClear = (Button) findViewById(R.id.clear);
+		context = (EditText) findViewById(R.id.editText1);
 		txtResponse = (TextView) findViewById(R.id.response);
 		
 		btnConnect.setOnClickListener(buttonConnectOnClickListener);
 		btnClear.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				txtResponse.setText("");
+				txtResponse.setText("Content is cleared");
 			}
 		});
 	}
@@ -52,8 +59,13 @@ public class MainActivity extends Activity {
 	//connect button listener
 	OnClickListener buttonConnectOnClickListener = new OnClickListener(){
 		public void onClick(View arg0){
-			NetworkTask myClientTask = new NetworkTask(edtTextAddress.getText().toString(),Integer.parseInt(edtTextPort.getText().toString()));
-			myClientTask.execute();
+			try{
+				NetworkTask myClientTask = new NetworkTask(edtTextAddress.getText().toString(),Integer.parseInt(edtTextPort.getText().toString()));
+				myClientTask.execute();
+			}catch(Exception e){
+				e.printStackTrace();
+				Toast.makeText(getApplicationContext(), "Not enough information", Toast.LENGTH_SHORT).show();
+			}
 		}
 	};
 
@@ -86,7 +98,7 @@ public class MainActivity extends Activity {
 	}
 	
 	//AsyncTask for socket connection
-	class NetworkTask extends AsyncTask<Void,Void,Void>{
+	class NetworkTask extends AsyncTask<Void,Void,String>{
 		private String dstAddress;
 		private int dstPort;
 		private String response;
@@ -97,20 +109,24 @@ public class MainActivity extends Activity {
 		}
 		
 		@Override
-		protected Void doInBackground(Void... arg0){
+		protected String doInBackground(Void... arg0){
 			try{
 				Socket socket = new Socket(dstAddress, dstPort);
 				InputStream in = socket.getInputStream();
-				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
-				byte[] buffer = new byte[1024];
+				OutputStream out = socket.getOutputStream();
+				PrintWriter pout = new PrintWriter(out, true);
 				
-				int bytesRead;
-				while((bytesRead = in.read(buffer)) != -1){
-					byteArrayOutputStream.write(buffer, 0, bytesRead);
-				}
+				pout.println("Hello from client");
 				
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String readResult = br.readLine();
+
 				socket.close();
-				response = byteArrayOutputStream.toString("UTF-8");
+				if(readResult!=null){
+					response = readResult;
+				}else{
+					response = "";
+				}
 			}catch(UnknownHostException e){
 				e.printStackTrace();
 			}catch(IOException e){
@@ -120,7 +136,7 @@ public class MainActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPostExecute(Void result){
+		protected void onPostExecute(String result){
 			txtResponse.setText(response);
 			super.onPostExecute(result);
 		}

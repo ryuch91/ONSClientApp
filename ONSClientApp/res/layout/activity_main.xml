@@ -6,10 +6,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation = "vertical"
     tools:context="kr.ac.kaist.gan.MainActivity" >
 
     <TextView
-        android:id="@+id/TextView1"
+        android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="ONS ANDROID APP">
@@ -20,17 +21,17 @@
         android:id="@+id/address"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/TextView1"
+        android:layout_below="@id/title"
         android:hint="IP Address"
         android:maxLength="15">
     </EditText>
     
-     <EditText
+    <EditText
         android:id="@+id/port"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/address"
-        android:hint="IP Address"
+        android:hint="Port"
         android:maxLength="5">
     </EditText>
     
@@ -38,7 +39,7 @@
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/TextView1"
+        android:layout_below="@id/port"
         android:hint="set any text"
         android:singleLine="true"
         android:maxLength="10"
@@ -66,8 +67,8 @@
         android:id="@+id/response"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/connect">
-        
+        android:layout_below="@id/connect"
+        android:text="Nothing">
     </TextView>
        
 
