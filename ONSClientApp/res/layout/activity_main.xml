@@ -63,6 +63,17 @@
         android:layout_below="@id/editText1">
     </Button>
     
+    <Button
+        android:id="@+id/qrcodecapture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText1"
+        android:layout_toRightOf="@id/clear"
+        android:text="Get QR Code"
+        
+        android:onClick = "onClickQRCapture">
+	</Button>
+    
     <TextView
         android:id="@+id/response"
         android:layout_width="fill_parent"
@@ -70,6 +81,7 @@
         android:layout_below="@id/connect"
         android:text="Nothing">
     </TextView>
-       
+    
+    
 
 </RelativeLayout>

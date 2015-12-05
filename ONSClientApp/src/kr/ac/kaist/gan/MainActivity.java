@@ -28,6 +28,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//for zxing and qrcode capture
+import android.content.Intent;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 public class MainActivity extends Activity {
 	private EditText edtTextAddress;
 	private EditText edtTextPort;
@@ -88,6 +93,38 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	//intent zxing to capture qrcode and barcode
+	public void onClickQRCapture(View view){
+		switch(view.getId()){
+		case R.id.qrcodecapture:
+			IntentIntegrator integrator = new IntentIntegrator(this);
+			integrator.initiateScan();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	//get result of qr code scan button
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		//get result from scanner
+		IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+		
+		//print result
+		new AlertDialog.Builder(this)
+        .setTitle(R.string.app_name)
+        .setMessage(result.getContents() + " [" + result.getFormatName() + "]")
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        })
+        .show();
+	}
+	
+	//alert for connection is failed
 	private void AlertDialog(){
 		AlertDialog.Builder ad = new AlertDialog.Builder(this);
 		ad.setMessage("Connection is failed").setPositiveButton("OK", new DialogInterface.OnClickListener(){ public void onClick(DialogInterface dialog, int id){dialog.cancel();}
