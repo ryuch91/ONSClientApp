@@ -1,9 +1,16 @@
 package kr.ac.kaist.gan;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,50 +18,44 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import kr.ac.kaist.gan.SimpleSocketThread.MessageTypeClass;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	private EditText edtTextAddress;
+	private EditText edtTextPort;
+	private Button btnConnect;
+	private Button btnClear;
+	private TextView txtResponse;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		final EditText ed1 = (EditText) findViewById(R.id.editText1);
-		Button buttonSend = (Button) findViewById(R.id.button1);
+		edtTextAddress = (EditText) findViewById(R.id.address);
+		edtTextPort = (EditText) findViewById(R.id.port);
+		btnConnect = (Button) findViewById(R.id.connect);
+		btnClear = (Button) findViewById(R.id.clear);
+		txtResponse = (TextView) findViewById(R.id.response);
 		
-		Handler mHandler = new Handler(Looper.getMainLooper()){
-			@Override
-			public void handleMessage(Message inputMessage){
-				switch(inputMessage.what){
-				case MessageTypeClass.SIMSOCK_DATA :
-					String msg = (String) inputMessage.obj;
-					Log.d("OUT",  msg);
-					// do something with UI
-					break;
-				case MessageTypeClass.SIMSOCK_CONNECTED:
-					// do something with UI
-					break;
-				case MessageTypeClass.SIMSOCK_DISCONNECTED:
-					// do something with UI
-					break;
-				}
-			}
-		};
-		
-		final SimpleSocketThread ssocket = new SimpleSocketThread("143.248.55.143", 7777, mHandler);
-		ssocket.start();
-		
-		buttonSend.setOnClickListener(new View.OnClickListener(){
-			@Override
+		btnConnect.setOnClickListener(buttonConnectOnClickListener);
+		btnClear.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				// TODO Auto-generated method stub
-				ssocket.sendString(ed1.getText());
+				txtResponse.setText("");
 			}
 		});
 	}
+	
+	//connect button listener
+	OnClickListener buttonConnectOnClickListener = new OnClickListener(){
+		public void onClick(View arg0){
+			NetworkTask myClientTask = new NetworkTask(edtTextAddress.getText().toString(),Integer.parseInt(edtTextPort.getText().toString()));
+			myClientTask.execute();
+		}
+	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,4 +85,44 @@ public class MainActivity extends Activity {
 		alert.show();
 	}
 	
+	//AsyncTask for socket connection
+	class NetworkTask extends AsyncTask<Void,Void,Void>{
+		private String dstAddress;
+		private int dstPort;
+		private String response;
+		
+		NetworkTask(String addr, int port){
+			dstAddress = addr;
+			dstPort = port;
+		}
+		
+		@Override
+		protected Void doInBackground(Void... arg0){
+			try{
+				Socket socket = new Socket(dstAddress, dstPort);
+				InputStream in = socket.getInputStream();
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
+				byte[] buffer = new byte[1024];
+				
+				int bytesRead;
+				while((bytesRead = in.read(buffer)) != -1){
+					byteArrayOutputStream.write(buffer, 0, bytesRead);
+				}
+				
+				socket.close();
+				response = byteArrayOutputStream.toString("UTF-8");
+			}catch(UnknownHostException e){
+				e.printStackTrace();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result){
+			txtResponse.setText(response);
+			super.onPostExecute(result);
+		}
+	}
 }

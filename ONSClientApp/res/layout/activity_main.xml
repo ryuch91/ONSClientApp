@@ -17,6 +17,24 @@
     </TextView>
     
     <EditText
+        android:id="@+id/address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TextView1"
+        android:hint="IP Address"
+        android:maxLength="15">
+    </EditText>
+    
+     <EditText
+        android:id="@+id/port"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address"
+        android:hint="IP Address"
+        android:maxLength="5">
+    </EditText>
+    
+    <EditText
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -28,18 +46,27 @@
     </EditText>
     
     <Button
-        android:text="Send"
-        android:id="@+id/button1"
+        android:text="connect"
+        android:id="@+id/connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editText1">
     </Button>
     
+    <Button
+        android:text="clear"
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/connect"
+        android:layout_below="@id/editText1">
+    </Button>
+    
     <TextView
-        android:id="@+id/ResultTextView"
+        android:id="@+id/response"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button1">
+        android:layout_below="@id/connect">
         
     </TextView>
        
