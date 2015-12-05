@@ -23,5 +23,8 @@
             </intent-filter>
         </activity>
     </application>
+    
+    <!-- add permission of internet to android -->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>
