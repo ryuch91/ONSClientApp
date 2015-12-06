@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
 		alert.show();
 	}
 	
-	//AsyncTask for socket connection
+	//Inner class : AsyncTask for socket connection
 	class NetworkTask extends AsyncTask<Void,Void,String>{
 		private String dstAddress;
 		private int dstPort;
@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
 				OutputStream out = socket.getOutputStream();
 				PrintWriter pout = new PrintWriter(out, true);
 				
-				pout.println("Hello from client");
+				pout.println(context.getText().toString());
 				
 				BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				String readResult = br.readLine();
