@@ -122,6 +122,8 @@ public class MainActivity extends Activity {
             }
         })
         .show();
+		
+		context.setText(result.getContents());
 	}
 	
 	//alert for connection is failed
