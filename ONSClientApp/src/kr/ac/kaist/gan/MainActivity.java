@@ -68,12 +68,16 @@ public class MainActivity extends Activity {
 	//connect button listener
 	OnClickListener buttonConnectOnClickListener = new OnClickListener(){
 		public void onClick(View arg0){
-			try{
-				NetworkTask myClientTask = new NetworkTask(edtTextAddress.getText().toString(),Integer.parseInt(edtTextPort.getText().toString()));
-				myClientTask.execute();
-			}catch(Exception e){
-				e.printStackTrace();
-				Toast.makeText(getApplicationContext(), "Not enough information", Toast.LENGTH_SHORT).show();
+			if(checkGSCode(context.getText().toString())){
+				try{
+					NetworkTask myClientTask = new NetworkTask(edtTextAddress.getText().toString(),Integer.parseInt(edtTextPort.getText().toString()));
+					myClientTask.execute();
+				}catch(Exception e){
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(), "Not enough information", Toast.LENGTH_SHORT).show();
+				}
+			}else{
+				Toast.makeText(getApplicationContext(), "GS1 code is invalid", Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -128,6 +132,14 @@ public class MainActivity extends Activity {
         .show();
 		
 		context.setText(result.getContents());
+	}
+	
+	private boolean checkGSCode(String gscode){
+		if(gscode.substring(0,1).equals("01")){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	//alert for connection is failed
