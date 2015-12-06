@@ -54,12 +54,16 @@ public class MainActivity extends Activity {
 		txtResponse = (TextView) findViewById(R.id.response);
 		
 		btnConnect.setOnClickListener(buttonConnectOnClickListener);
-		btnClear.setOnClickListener(new OnClickListener(){
-			public void onClick(View v){
-				txtResponse.setText("Content is cleared");
-			}
-		});
+		btnClear.setOnClickListener(buttonClearOnClickListener);
 	}
+	
+	//clear button listener
+	OnClickListener buttonClearOnClickListener = new OnClickListener(){
+		public void onClick(View arg0){
+			txtResponse.setText("Content is cleared");
+			context.setText("");
+		}
+	};
 	
 	//connect button listener
 	OnClickListener buttonConnectOnClickListener = new OnClickListener(){
